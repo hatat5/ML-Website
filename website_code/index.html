@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
+
+    <title>Nishant Subramani ML Project</title>
+
+    
+
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+
+
+
+
+
+
+
+  
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/layouts/side-menu-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="css/layouts/side-menu.css">
+    <!--<![endif]-->
+  
+
+
+    
+
+    
+
+</head>
+<body>
+
+
+
+
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="index.html">EECS 349</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="index.html" class="pure-menu-link">Home</a></li>
+                <li class="pure-menu-item"><a href="code.html" class="pure-menu-link">Code</a></li>
+                <li class="pure-menu-item"><a href="report.html" class="pure-menu-link">Final Report</a></li>
+                <li class="pure-menu-item"><a href="contact.html" class="pure-menu-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h1>Predicting Pathology Features in Glioblastoma</h1>
+            <h2>Machine Learning project that uses gene expression data to predict pathology image features in Glioblastoma</h2>
+            <h2>Nishant Subramani - nishantsubramani2017@u.northwestern.edu</h2>
+            <h2>Northwestern University; EECS 349</h2>
+        </div>
+
+        <div class="content">
+            <h2 class="content-subhead">Motivation</h2>
+            <p>
+                Glioblastoma multiforme (GBM) is the most common, malignant and aggressive primary brain tumor that affects humans. Survival rates are low--the median survival rate without treatment is 4.5 months, but with standard-of-care and chemotherapy, this rises to 15 months (Johnson 2011, Van Meir 2010). The goal of this study is to utilize machine learning algorithms to try and predict
+                pathological factors acquired from image analysis in GBM patients using clustered gene expression data. This study could provide invaluable information for early detection of the disease and
+                a means for identifying high risk patients from merely genetic data, a much more accessible, cheaper, and quicker information source. 
+            </p>
+
+            <h2 class="content-subhead">Methodology</h2>
+            <p>
+                Stanford Biomedical Informatics Professor, Olivier Gevaert, provided the 3 datasets used in this analysis. The first dataset, the pathology image dataset, had 224 patients with many pathological
+                features measured. The second and third datasets were of the same 426 patients, and were clustered gene expression datasets, one with 100 clusters and thus features, and the second with 200
+                clusters and features. The patients common to both types of datasets (200) were extracted and combined, and only six outcomes from the pathology dataset were chosen: Cellularity, Cell Voronoi Area, Cytoplasm Background Intensity, Edge Length, Nucleus Area, and Nucleus Background Intensity. These outcomes along with the features were continuous variables. Analysis was completed in R.
+
+            </p>
+
+            <h2 class="content-subhead">Algorithmic Design</h2>
+            <p>
+                Linear Regression, Random Forest, and Cart Trees using regression were used on each of the six outcome variables with both the 100 feature and 200 feature datasets respectively. Due to the small sample size, a separate test set could not be sacrificed. Due to this, 10-Fold Cross Validation was used for each algorithm. For linear regression, a univariate spearman correlation test was done
+                to eliminate uncorrelated variables from the model and curtail overfitting, and for all others, the default R settings were used. Each of the outcomes were made discrete by calculating the 75% percentile value for each of the outcomes in the training sets and equating any observation greater than that to risk, a value of 1, and equating any observation less than that to control, a value of 0. With this new modified data, Naive Bayes, Neural Networks, Random Forest, and Cart Trees in a classification setting were used on each of the six outcome variables with both the 100 feature and 200 feature datasets respectively. Again, 10-Fold Cross Validation was used for each algorithm. For neural networks, the hidden layer size was set to 4 to try and model complex relationships in the data, and the default R settings were used for the rest.
+            </p>
+
+            <h2 class="content-subhead">Evaluation and Results</h2>
+            <p>
+                In both experiments (regression and classification) success was determined for each outcome in each feature set. In the regression experiment, mean squared error (MSE) was the evaluation metric of choice. For the classification experiment, area under the receiver operating characteristic (ROC) curve (AUC) was the evaluation metric of choice. For the 100 feature set, the performances of random forest and linear regression were similar (MSE ~ 1.1), while the Cart Tree had a two times higher MSE. For the 200 feature set, however, the performance of random forest was slightly better or equal across the board for each of the outcomes (MSE ~ 1.0), while the Cart Tree still performed woefully, with still a two times higher MSE. In the classification experiments, regardless of outcome or feature set, the neural network performed best, significantly better than any of its counterparts (AUC ~ 0.85). All the other algorithms performed very poorly with an    (AUC ~ 0.55). These results show that there may be a complicated underlying relationship between gene expression and pathology image features in GBM, but may also merely indicate over-fitting as a neural network with a large number of hidden layers is bound to over-fit.
+            </p>
+
+            <h2 class="content-subhead">Limitations and Future</h2>
+            <p>
+                Limitations of this study include a highly processed feature set and no access to raw data, little to no domain knowledge, little documentation for much of the data, and blind discretization. Given the nature of the distributions of the outcome variables, a standard-blind discretization hindered the possibility of ascertaining a significant difference between risk and control groups. Having 100 or 200 features and only 200 patients posed a significant problem, so identifying a larger sample size in a future study will be paramount. Future work will focus on building causal models using more raw data to ascertain if a causal link between certain genes and certain pathological features in GBM truly exists.
+            </p>
+
+            <table class="pure-table pure-table-bordered">
+                <thead>
+                    <caption>Algorithm Performance on 100 Features</caption>
+                    
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td> </td>
+                        <td>Cellularity</td>
+                        <td>Cell Voronoi Area</td>
+                        <td>Cytoplasm Background Intensity</td>
+                        <td>Edge Length</td>
+                        <td>Nucleus Area</td>
+                        <td>Nucleus Background Intensity</td>
+                    </tr>
+
+                    <tr>
+                        <td>Lin Reg MSE</td>
+                        <td>1.11235</td>
+                        <td>0.92206</td>
+                        <td>1.10739</td>
+                        <td>0.94126</td>
+                        <td>1.03336</td>
+                        <td>1.06527</td>
+                    </tr>
+
+                    <tr>
+                        <td>Random Forest MSE</td>
+                        <td>1.03765</td>
+                        <td>0.91624</td>
+                        <td>1.10384</td>
+                        <td>0.91109</td>
+                        <td>0.96657</td>
+                        <td>1.08113</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cart MSE</td>
+                        <td>2.04982</td>
+                        <td>1.75909</td>
+                        <td>2.20726</td>
+                        <td>1.97758</td>
+                        <td>2.01612</td>
+                        <td>1.91001</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Naive Bayes AUC</td>
+                        <td>0.59</td>
+                        <td>0.6066</td>
+                        <td>0.5166</td>
+                        <td>0.6130</td>
+                        <td>0.6188</td>
+                        <td>0.5525</td>
+                    </tr>
+
+                    <tr>
+                        <td>Neural Network AUC</td>
+                        <td>0.85</td>
+                        <td>0.91</td>
+                        <td>0.9407</td>
+                        <td>0.8751</td>
+                        <td>0.8568</td>
+                        <td>0.8947</td>
+                    </tr>
+
+                    <tr>
+                        <td>Random Forest AUC</td>
+                        <td>0.58</td>
+                        <td>0.5733</td>
+                        <td>0.5193</td>
+                        <td>0.5753</td>
+                        <td>0.5197</td>
+                        <td>0.5261</td>
+                    </tr>
+
+                    <tr>
+                        <td>CART AUC</td>
+                        <td>0.5967</td>
+                        <td>0.5667</td>
+                        <td>0.5358</td>
+                        <td>0.5780</td>
+                        <td>0.5124</td>
+                        <td>0.5138</td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="js/ui.js"></script>
+
+
+</body>
+</html>
